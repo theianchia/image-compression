@@ -1,4 +1,4 @@
-import java.awt.*;
+import java.awt.Color;
 import java.io.Serializable;
 
 public class QuadTreeNode implements Serializable {

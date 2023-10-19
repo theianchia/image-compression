@@ -2,7 +2,9 @@ import java.awt.*;
 import java.io.Serializable;
 
 public class QuadTree implements Serializable {
-    private static final double VARIANCE_THRESHOLD = 0.20;
+    private static final int MAX_DEPTH = 6;
+    private static final double VARIANCE_THRESHOLD = 20.0;
+    private static final double COLOR_MERGE_THRESHOLD = 20.0;
 
     QuadTreeNode root;
     int[][][] pixels;
@@ -12,12 +14,12 @@ public class QuadTree implements Serializable {
         this.root = new QuadTreeNode(0, 0, pixels.length, pixels[0].length);
     }
 
-    public void buildTree(QuadTreeNode node) {
+    public void buildTree(QuadTreeNode node, int depth) {
         Color rgb = computeAverageColor(node.x, node.y, node.width, node.height);
+        node.avgColor = rgb;
 
-        if (node.width <= 1 || node.height <= 1
+        if (node.width <= 1 || node.height <= 1 || depth >= MAX_DEPTH
                 || colorVarianceBelowThreshold(node.x, node.y, node.width, node.height)) {
-            node.avgColor = rgb;
             return;
         }
 
@@ -35,9 +37,36 @@ public class QuadTree implements Serializable {
                         newWidth,
                         newHeight);
 
-                buildTree(node.children[i * 2 + j]);
+                buildTree(node.children[i * 2 + j], depth + 1);
             }
         }
+    }
+
+    public void pruneTree(QuadTreeNode node) {
+        if (node.children == null) return;
+
+        boolean canMerge = true;
+
+        Color avgColor = node.avgColor;
+        for (QuadTreeNode child : node.children) {
+            pruneTree(child);
+            if (colorDistance(avgColor, child.avgColor) > COLOR_MERGE_THRESHOLD) {
+                canMerge = false;
+                break;
+            }
+        }
+
+        if (canMerge) {
+            node.children = null;  // Remove child nodes to merge
+        }
+    }
+
+    private double colorDistance(Color c1, Color c2) {
+        int redDiff = c1.getRed() - c2.getRed();
+        int greenDiff = c1.getGreen() - c2.getGreen();
+        int blueDiff = c1.getBlue() - c2.getBlue();
+        
+        return Math.sqrt(redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff);
     }
 
     private boolean colorVarianceBelowThreshold(int x, int y, int width, int height) {

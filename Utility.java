@@ -8,7 +8,8 @@ public class Utility {
         // gets written into outputFileName
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) { 
             QuadTree tree = new QuadTree(pixels);
-            tree.buildTree(tree.root);
+            tree.buildTree(tree.root, 0);
+            tree.pruneTree(tree.root);
             oos.writeObject(tree);
         }
     }
