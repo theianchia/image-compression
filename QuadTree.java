@@ -2,9 +2,9 @@ import java.awt.*;
 import java.io.Serializable;
 
 public class QuadTree implements Serializable {
-    private static final int MAX_DEPTH = 6;
-    private static final double VARIANCE_THRESHOLD = 20.0;
-    private static final double COLOR_MERGE_THRESHOLD = 20.0;
+    private static final int MAX_DEPTH = 5;
+    private static final double VARIANCE_THRESHOLD = 10.0;
+    private static final double COLOR_MERGE_THRESHOLD = 10.0;
 
     QuadTreeNode root;
     int[][][] pixels;
@@ -16,7 +16,7 @@ public class QuadTree implements Serializable {
 
     public void buildTree(QuadTreeNode node, int depth) {
         Color rgb = computeAverageColor(node.x, node.y, node.width, node.height);
-        node.avgColor = rgb;
+        node.setAvgColor(rgb);
 
         if (node.width <= 1 || node.height <= 1 || depth >= MAX_DEPTH
                 || colorVarianceBelowThreshold(node.x, node.y, node.width, node.height)) {
@@ -47,10 +47,10 @@ public class QuadTree implements Serializable {
 
         boolean canMerge = true;
 
-        Color avgColor = node.avgColor;
+        Color avgColor = node.getAvgColor();
         for (QuadTreeNode child : node.children) {
             pruneTree(child);
-            if (colorDistance(avgColor, child.avgColor) > COLOR_MERGE_THRESHOLD) {
+            if (colorDistance(avgColor, child.getAvgColor()) > COLOR_MERGE_THRESHOLD) {
                 canMerge = false;
                 break;
             }

@@ -36,9 +36,9 @@ public class Utility {
         if (node.children == null) {
             for (int i = node.x; i < node.x + node.width; i++) {
                 for (int j = node.y; j < node.y + node.height; j++) {
-                    pixels[i][j][0] = node.avgColor.getRed();
-                    pixels[i][j][1] = node.avgColor.getGreen();
-                    pixels[i][j][2] = node.avgColor.getBlue();
+                    pixels[i][j][0] = node.getAvgColor().getRed();
+                    pixels[i][j][1] = node.getAvgColor().getGreen();
+                    pixels[i][j][2] = node.getAvgColor().getBlue();
                 }
             }
         } else {
