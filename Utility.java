@@ -10,7 +10,7 @@ public class Utility {
             QuadTree tree = new QuadTree(pixels);
             tree.buildTree(tree.root, 0);
             tree.pruneTree(tree.root);
-            oos.writeObject(tree);
+            oos.writeObject(tree.root);
         }
     }
 
@@ -21,10 +21,10 @@ public class Utility {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName))) {
             Object object = ois.readObject();
     
-            if (object instanceof QuadTree) {
-                QuadTree tree = (QuadTree) object;
-                int[][][] pixels = new int[tree.root.width][tree.root.height][3];
-                fillPixels(tree.root, pixels);
+            if (object instanceof QuadTreeNode) {
+                QuadTreeNode root = (QuadTreeNode) object;
+                int[][][] pixels = new int[root.width][root.height][3];
+                fillPixels(root, pixels);
                 return pixels;
             } else {
                 throw new IOException("Invalid object type in the input file");

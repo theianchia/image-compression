@@ -2,9 +2,9 @@ import java.awt.*;
 import java.io.Serializable;
 
 public class QuadTree implements Serializable {
-    private static final int MAX_DEPTH = 5;
+    private static final int MAX_DEPTH = 6;
     private static final double VARIANCE_THRESHOLD = 10.0;
-    private static final double COLOR_MERGE_THRESHOLD = 10.0;
+    private static final double COLOR_MERGE_THRESHOLD = 20.0;
 
     QuadTreeNode root;
     int[][][] pixels;
