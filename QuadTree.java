@@ -2,7 +2,8 @@ import java.awt.*;
 import java.io.Serializable;
 
 public class QuadTree implements Serializable {
-    private static final int MAX_DEPTH = 6;
+    private static long MAX_DEPTH;
+    private static final double MAX_DEPTH_PERCENTAGE = 0.65;
     private static final double VARIANCE_THRESHOLD = 10.0;
     private static final double COLOR_MERGE_THRESHOLD = 20.0;
 
@@ -12,6 +13,7 @@ public class QuadTree implements Serializable {
     public QuadTree(int[][][] pixels) {
         this.pixels = pixels;
         this.root = new QuadTreeNode(0, 0, pixels.length, pixels[0].length);
+        MAX_DEPTH = Math.round((Math.log(pixels.length * pixels[0].length) / Math.log(4)) * MAX_DEPTH_PERCENTAGE);
     }
 
     public void buildTree(QuadTreeNode node, int depth) {

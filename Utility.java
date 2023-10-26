@@ -3,9 +3,7 @@ import java.io.*;
 public class Utility {
 
     public void Compress(int[][][] pixels, String outputFileName) throws IOException {
-        // The following is a bad implementation that we have intentionally put in the function to make App.java run, you should 
-        // write code to reimplement the function without changing any of the input parameters, and making sure the compressed file
-        // gets written into outputFileName
+        // QuadTree
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) { 
             QuadTree tree = new QuadTree(pixels);
             tree.buildTree(tree.root, 0);
@@ -15,9 +13,7 @@ public class Utility {
     }
 
     public int[][][] Decompress(String inputFileName) throws IOException, ClassNotFoundException {
-        // The following is a bad implementation that we have intentionally put in the function to make App.java run, you should 
-        // write code to reimplement the function without changing any of the input parameters, and making sure that it returns
-        // an int [][][]
+        // QuadTree
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName))) {
             Object object = ois.readObject();
     
@@ -32,6 +28,7 @@ public class Utility {
         }
     }
 
+    // QuadTree
     private void fillPixels(QuadTreeNode node, int[][][] pixels) {
         if (node.children == null) {
             for (int i = node.x; i < node.x + node.width; i++) {
@@ -47,5 +44,4 @@ public class Utility {
             }
         }
     }
-
 }
